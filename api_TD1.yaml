@@ -8,7 +8,6 @@ servers:
 paths:
   /students:
     get:
-      summary: Récupérer les informations des étudiants
       responses:
         '200':
           description: Succès - Liste des étudiants récupérée
@@ -34,7 +33,6 @@ paths:
         '500':
           description: server error
     post:
-      summary: Ajouter un nouvel étudiant
       requestBody:
         required: true
         content:
