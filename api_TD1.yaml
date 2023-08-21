@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: API d'Onboarding pour les étudiants
+  title: API d'Onboarding pour les étudiants et enseignants
   description: STD22069
   version: 1.3.0
 servers:
@@ -8,6 +8,9 @@ servers:
 paths:
   /students:
     get:
+      summary: Récupérer la liste des étudiants
+      tags:
+        - Students
       responses:
         '200':
           description: Succès - Liste des étudiants récupérée
@@ -31,8 +34,12 @@ paths:
                       birthdate: '2003-07-15'
                     
         '500':
-          description: server error
+          description: Erreur interne du serveur
+
     post:
+      summary: Ajouter un nouvel étudiant
+      tags:
+        - Students
       requestBody:
         required: true
         content:
@@ -59,4 +66,124 @@ paths:
               example:
                 message: Étudiant ajouté avec succès
         '500':
-          description: server error
+          description: Erreur interne du serveur
+
+    put:
+      summary: Mettre à jour les informations d'un étudiant
+      tags:
+        - Students
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        '200':
+          description: Succès - Informations de l'étudiant mises à jour
+          content:
+            application/json:
+              example:
+                message: Informations de l'étudiant mises à jour
+        '500':
+          description: Erreur interne du serveur
+
+    delete:
+      summary: Supprimer un étudiant
+      tags:
+        - Students
+      responses:
+        '200':
+          description: Succès - Étudiant supprimé avec succès
+          content:
+            application/json:
+              example:
+                message: Étudiant supprimé avec succès
+        '500':
+          description: Erreur interne du serveur
+
+  /teachers:
+    get:
+      summary: Récupérer la liste des enseignants et des cours
+      tags:
+        - Teachers
+      responses:
+        '200':
+          description: Succès - Liste des enseignants et des cours récupérée
+          content:
+            application/json:
+              example:
+                - teacher_name: Tokimahery Ramarozaka
+                  courses:
+                    - course_name: Algorithmique
+                      course_code: prog1
+                      course_duration: 12 semaines
+        '500':
+          description: Erreur interne du serveur
+
+    post:
+      summary: Ajouter un nouvel enseignant avec des cours
+      tags:
+        - Teachers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Teacher'
+      responses:
+        '200':
+          description: Succès - Enseignant ajouté avec succès
+          content:
+            application/json:
+              example:
+                message: Enseignant ajouté avec succès
+        '500':
+          description: Erreur interne du serveur
+
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+      example:
+        id: 1
+        name: Sanda
+        birthdate: '2003-07-15'
+
+    Teacher:
+      type: object
+      properties:
+        teacher_name:
+          type: string
+        courses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+      example:
+        teacher_name: Tokimahery Ramarozaka
+        courses:
+          - course_name: Algorithmique
+            course_code: prog1
+            course_duration: 12 semaines
+
+    Course:
+      type: object
+      properties:
+        course_name:
+          type: string
+        course_code:
+          type: string
+        course_duration:
+          type: string
+      example:
+        course_name: Algorithmique
+        course_code: prog1
+        course_duration: 12 semaines
